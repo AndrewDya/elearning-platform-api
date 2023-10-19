@@ -24,11 +24,11 @@ class UserProductAccess(models.Model):
 
 class LessonView(models.Model):
     STATUS_CHOICES = [
-        ("Просмотрено", "Просмотрено"),
-        ("Не просмотрено", "Не просмотрено"),
+        (1, "Просмотрено"),
+        (2, "Не просмотрено"),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    user = models.ManyToManyField(User)
+    lesson = models.ManyToManyField(Lesson)
     viewed_time_seconds = models.IntegerField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)

@@ -1,12 +1,11 @@
 from rest_framework import generics
-from rest_framework.permissions import AllowAny
 from .models import Lesson, UserProductAccess
 from .serializers import LessonSerializer
 
 
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
-    permission_classes = [AllowAny]
+    permission_classes = []
 
     def get_queryset(self):
         user = self.request.user
