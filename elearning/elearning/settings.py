@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'courses',
+    'elearning',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +124,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# This configuration allows unrestricted access to all views without requiring
+# authentication. Use with caution, as it can create security vulnerabilities.
+# In a production environment, consider implementing appropriate authentication
+# and authorization mechanisms.
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+    ],
+}
