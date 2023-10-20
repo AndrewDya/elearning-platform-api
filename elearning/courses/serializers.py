@@ -1,17 +1,9 @@
 from rest_framework import serializers
-from .models import Lesson, LessonView
 
 
-class LessonDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lesson
-        fields = '__all__'
-
-
-class LessonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lesson
-        fields = ['id', 'name', 'video_link', 'duration_seconds']
+class UserLessonSerializer(serializers.Serializer):
+    user_name = serializers.CharField()
+    lessons = serializers.ListField(child=serializers.DictField())
 
 
 class ProductStatSerializer(serializers.Serializer):
