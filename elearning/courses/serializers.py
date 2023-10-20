@@ -6,6 +6,11 @@ class UserLessonSerializer(serializers.Serializer):
     lessons = serializers.ListField(child=serializers.DictField())
 
 
+class ProductSerializer(serializers.Serializer):
+    product_name = serializers.CharField()
+    lessons = serializers.ListField(child=serializers.DictField())
+
+
 class ProductStatSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
     product_name = serializers.CharField()

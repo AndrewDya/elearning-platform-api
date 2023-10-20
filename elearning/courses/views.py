@@ -2,7 +2,8 @@ from rest_framework import generics, views, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .models import Lesson, UserProductAccess, Product, LessonView, User
-from .serializers import ProductStatSerializer, UserLessonSerializer
+from .serializers import ProductStatSerializer, UserLessonSerializer, \
+    ProductSerializer
 from django.db.models import Sum
 
 
@@ -44,6 +45,44 @@ class LessonsByUsersAPIView(generics.ListAPIView):
             user_lessons.append(user_lesson_data)
 
         return user_lessons
+
+
+class LessonsByProductAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        user_data = []
+
+        # Получаем все продукты
+        products = Product.objects.all()
+
+        for product in products:
+            lessons = Lesson.objects.filter(products=product)
+
+            product_lessons = []
+
+            for lesson in lessons:
+                lesson_view = LessonView.objects.filter(lesson=lesson).last()
+                status = "Просмотрено" if (lesson_view and (lesson_view.viewed_time_seconds >= lesson.duration_seconds * 0.8)) else "Не просмотрено"
+                viewed_time = lesson_view.viewed_time_seconds if lesson_view else 0
+
+                lesson_data = {
+                    "name": lesson.name,
+                    "duration_seconds": lesson.duration_seconds,
+                    "status": status,
+                    "viewed_time_seconds": viewed_time,
+                }
+
+                product_lessons.append(lesson_data)
+
+            product_name = product.name
+
+            user_data.append({
+                "product_name": product_name,
+                "lessons": product_lessons,
+            })
+
+        return user_data
 
 
 class ProductStatAPIView(views.APIView):
