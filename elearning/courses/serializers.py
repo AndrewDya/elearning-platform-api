@@ -14,7 +14,7 @@ class LessonDetailSerializer(serializers.ModelSerializer):
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = '__all__'
+        fields = ['id', 'name', 'video_link', 'duration_seconds']
 
 
 class ProductStatSerializer(serializers.Serializer):
