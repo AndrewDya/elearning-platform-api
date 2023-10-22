@@ -23,11 +23,9 @@
    ```bash
    cd elearning\
 
-
 3. **Запустите сервер Django:**
    ```bash
    python manage.py runserver
-
 
 Теперь API запущен и доступен по следующим адресам:
 
