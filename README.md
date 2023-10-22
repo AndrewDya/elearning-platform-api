@@ -18,3 +18,19 @@
 1. **Клонируйте репозиторий:**
    ```bash
    git clone https://github.com/andrewdya/elearning-platform-api.git
+
+2. **Перейдите в папку:**
+   ```bash
+   cd elearning\
+
+
+3. **Запустите сервер Django:**
+   ```bash
+   python manage.py runserver
+
+
+Теперь API запущен и доступен по следующим адресам:
+
+- [http://127.0.0.1:8000/api/product-stats/](http://127.0.0.1:8000/api/product-stats/)
+- [http://127.0.0.1:8000/api/lessons/by-user/](http://127.0.0.1:8000/api/lessons/by-user/)
+- [http://127.0.0.1:8000/api/lessons/by-product/](http://127.0.0.1:8000/api/lessons/by-product/)

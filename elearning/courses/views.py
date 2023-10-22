@@ -8,6 +8,19 @@ from django.db.models import Sum
 
 
 class LessonsByUsersAPIView(generics.ListAPIView):
+    """
+    Представление, предоставляющее список уроков для каждого пользователя.
+
+    Serializer: UserLessonSerializer
+
+    Методы:
+    GET: Возвращает список уроков для каждого пользователя, включая информацию
+    о статусе и времени просмотра уроков.
+
+    Параметры:
+    Нет дополнительных параметров.
+    """
+
     serializer_class = UserLessonSerializer
 
     def get_queryset(self):
@@ -24,8 +37,12 @@ class LessonsByUsersAPIView(generics.ListAPIView):
                 for lesson in product_lessons:
                     lesson_view = LessonView.objects.filter(user=user,
                                                             lesson=lesson).last()
-                    status = "Просмотрено" if (lesson_view and (lesson_view.viewed_time_seconds >= lesson.duration_seconds * 0.8)) else "Не просмотрено"
-                    viewed_time = lesson_view.viewed_time_seconds if lesson_view else 0
+                    status = "Просмотрено" if (lesson_view and
+                                               (lesson_view.viewed_time_seconds >=
+                                                lesson.duration_seconds * 0.8)) \
+                        else "Не просмотрено"
+                    viewed_time = lesson_view.viewed_time_seconds \
+                        if lesson_view else 0
 
                     lesson_data = {
                         'lesson_id': lesson.id,
@@ -48,12 +65,21 @@ class LessonsByUsersAPIView(generics.ListAPIView):
 
 
 class LessonsByProductAPIView(generics.ListAPIView):
+    """
+    Представление, предоставляющее список уроков для каждого продукта.
+
+    Serializer: ProductSerializer
+
+    Методы:
+    GET: Возвращает список уроков для каждого продукта, включая информацию
+    о статусе и времени просмотра уроков.
+    """
+
     serializer_class = ProductSerializer
 
     def get_queryset(self):
         user_data = []
 
-        # Получаем все продукты
         products = Product.objects.all()
 
         for product in products:
@@ -63,8 +89,12 @@ class LessonsByProductAPIView(generics.ListAPIView):
 
             for lesson in lessons:
                 lesson_view = LessonView.objects.filter(lesson=lesson).last()
-                status = "Просмотрено" if (lesson_view and (lesson_view.viewed_time_seconds >= lesson.duration_seconds * 0.8)) else "Не просмотрено"
-                viewed_time = lesson_view.viewed_time_seconds if lesson_view else 0
+                status = "Просмотрено" if (lesson_view and
+                                           (lesson_view.viewed_time_seconds >=
+                                            lesson.duration_seconds * 0.8)) \
+                    else "Не просмотрено"
+                viewed_time = lesson_view.viewed_time_seconds \
+                    if lesson_view else 0
 
                 lesson_data = {
                     "name": lesson.name,
@@ -86,6 +116,16 @@ class LessonsByProductAPIView(generics.ListAPIView):
 
 
 class ProductStatAPIView(views.APIView):
+    """
+    Представление, предоставляющее статистику продуктов.
+
+    Методы:
+    GET: Возвращает статистику по каждому продукту, включая количество
+    просмотренных уроков, общее время просмотра, общее количество студентов
+    и процент приобретения продукта.
+
+    """
+
     permission_classes = [AllowAny]
 
     def get(self, request):
@@ -98,7 +138,8 @@ class ProductStatAPIView(views.APIView):
                 Sum('viewed_time_seconds'))['viewed_time_seconds__sum']
             total_students = UserProductAccess.objects.filter(product=product).count()
             acquisition_percentage = round((total_students /
-                                          User.objects.count()) * 100, 0) if User.objects.count() > 0 else 0
+                                          User.objects.count()) * 100, 0) \
+                if User.objects.count() > 0 else 0
 
             product_stat = ProductStatSerializer(data={
                 'product_id': product.id,
